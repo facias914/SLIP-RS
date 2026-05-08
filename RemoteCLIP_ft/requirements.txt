@@ -1,0 +1,10 @@
+transformers == 4.56.1
+tokenizers
+triton
+timm
+scipy
+termcolor
+addict
+yapf == 0.40.1
+matplotlib
+ftfy
