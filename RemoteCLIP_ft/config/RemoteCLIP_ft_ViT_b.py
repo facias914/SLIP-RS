@@ -12,16 +12,16 @@ alpha = 1
 dropout_rate = 0.2
 
 # dataset
-image_root_list=["./DATA/train/image/Plane", 
-                 "./DATA/train/image/Ship",
-                 "./DATA/train/image/Vehicle"]
-label_root_list=["./DATA/train/label/Plane", 
-                 "./DATA/train/label/Ship",
-                 "./DATA/train/label/Vehicle"]
+image_root_list=["./DATA/RS_Attri_Cls/train/image/Plane", 
+                 "./DATA/RS_Attri_Cls/train/image/Ship",
+                 "./DATA/RS_Attri_Cls/train/image/Vehicle"]
+label_root_list=["./DATA/RS_Attri_Cls/train/label/Plane", 
+                 "./DATA/RS_Attri_Cls/train/label/Ship",
+                 "./DATA/RS_Attri_Cls/train/label/Vehicle"]
 
 
-val_image_root="./DATA/test/image/Plane"
-val_label_root="./DATA/test/label/Plane"
+val_image_root="./DATA/RS_Attri_Cls/test/image/Plane"
+val_label_root="./DATA/RS_Attri_Cls/test/label/Plane"
 test_attris = ["Usage", "Purpose", "Engine position", "Number of engines", "Propulsion type", "Wing configuration"]
 
 # learner

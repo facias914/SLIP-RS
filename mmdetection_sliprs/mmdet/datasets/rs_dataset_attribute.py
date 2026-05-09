@@ -85,8 +85,21 @@ def rebuild_attribute_categories(coco, test_attri):
 
     attr_values = set()
     for ann in coco.dataset["annotations"]:
-        if test_attri in ann["attributes"]:
-            attr_values.add(ann["attributes"][test_attri])
+        if isinstance(test_attri, list):
+            temp = ''
+            for i in test_attri:
+                if i in ann["attributes"]:
+                    p = ann["attributes"][i]
+                    if len(temp) == 0:
+                        temp = f"{p}"
+                    else:
+                        temp = f"{temp}+{p}"
+                else:
+                    break
+            attr_values.add(temp)
+        else:
+            if test_attri in ann["attributes"]:
+                attr_values.add(ann["attributes"][test_attri])
 
     attr_values = sorted(list(attr_values))
     print(f"Found {len(attr_values)} attribute values for '{test_attri}':")
@@ -115,11 +128,22 @@ def rebuild_attribute_categories(coco, test_attri):
     for ann_id, ann in coco.anns.items():
         ann = copy.deepcopy(ann)
 
-        if test_attri in ann["attributes"]:
-            val = ann["attributes"][test_attri]
-            ann["category_id"] = attr_value_to_new_id[val]
+        if isinstance(test_attri, list):
+            vals = []
+            for i in test_attri:
+                if i not in ann["attributes"]:
+                    ann["category_id"] = -1
+                    break
+                vals.append(str(ann["attributes"][i]))
+            else:
+                val = "+".join(vals)
+                ann["category_id"] = attr_value_to_new_id[val]
         else:
-            ann["category_id"] = -1
+            if test_attri in ann["attributes"]:
+                val = ann["attributes"][test_attri]
+                ann["category_id"] = attr_value_to_new_id[val]
+            else:
+                ann["category_id"] = -1
 
         new_anns[ann_id] = ann
         new_imgToAnns[ann["image_id"]].append(ann)
@@ -163,8 +187,9 @@ class RS_Dataset_Attri(CocoDataset):
         self.file_client = mmcv.FileClient(**file_client_args)
 
         if test_mode:
-            test_attris = attri_dict[test_cls][test_attri]
-            self.CLASSES = [f"{test_cls} + {item}" for item in test_attris]
+            print()
+            # test_attris = attri_dict[test_cls][test_attri]
+            # self.CLASSES = [f"{test_cls} + {item}" for item in test_attris]
         else:
             self.CLASSES = list(attri_dict.keys())
             self.text_builder = AttributeContrastiveBuilder(attri_dict)

@@ -1,6 +1,6 @@
 # model settings
 pretrained = './model_weights/dinov3_convnext_large_pretrain_lvd1689m-21b726bb.pth'  # noqa
-text_encoder_checkpoint = './model_weights/remote_clip.pth'
+text_encoder_checkpoint = './model_weights/remoteclip_ft.pth'
 
 model = dict(
     type='SLIP_RS',
@@ -650,6 +650,16 @@ data = dict(
                 test_mode=True,
                 ann_file=test_attri_data_root + '/ship/annotations.json',
                 img_prefix=test_attri_data_root + '/ship/images/',
+                pipeline=test_pipeline),
+            # You can use any number and order of attributes to test the recognition capability of attribute permutations and combinations.
+            dict(
+                type=attri_dataset_type,
+                attri_dict=attri_dict,
+                test_cls="Plane",
+                test_attri=["Usage", "Purpose", "Propulsion type", "Engine position", "Number of engines", "Wing configuration"],
+                test_mode=True,
+                ann_file=test_plane_data_root + '/annotations.json',
+                img_prefix=test_plane_data_root + '/images/',
                 pipeline=test_pipeline)
         ],
         separate_eval=True 
