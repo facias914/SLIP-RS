@@ -45,7 +45,7 @@ pip install -r requirements.txt
 ```
 
 ### Data
-Please download the dataset via [Baidu Cloud](https://pan.baidu.com/s/1ofRuBk5ltc_B_9BsT4nM0w)(hxrp) and organize the dataset as follows:
+Please download the dataset via [Baidu Cloud](https://pan.baidu.com/s/1XNscwBdndGjwih_zk8EzfQ)(udnm) and organize the dataset as follows:
 
 ```bash
 RemoteCLIP_ft/
@@ -99,17 +99,17 @@ SLIP-RS is trained on both open-source remote sensing datasets and large-scale c
 
 1. RS-O: 
 
-- **DOTA-v2.0**. Please download the images and horizontal bounding box annotations from the official [DOTA dataset website](https://captain-whu.github.io/DOTA/dataset.html?utm_source=chatgpt.com). After downloading, preprocess the dataset by slicing large images into patches following the official tools provided by [MMRotate DOTA tools](https://github.com/open-mmlab/mmrotate/tree/main/tools/data/dota?utm_source=chatgpt.com). RS-O includes all train set.
-- **DIOR**. Please download from [DIOR](https://gcheng-nwpu.github.io/#Datasets). RS-O includes all trainval set.
-- **Others**. Other open-source datasets included in RS-O can be downloaded from:[Baidu Cloud](https://pan.baidu.com/s/1ofRuBk5ltc_B_9BsT4nM0w?utm_source=chatgpt.com)(code: hxrp)
+- **DOTA-v2.0**. Please download the images and horizontal bounding box annotations from the official [DOTA dataset website](https://captain-whu.github.io/DOTA/dataset.html?utm_source=chatgpt.com). After downloading, preprocess the dataset by slicing large images into patches following the official tools provided by [MMRotate DOTA tools](https://github.com/open-mmlab/mmrotate/tree/main/tools/data/dota?utm_source=chatgpt.com). Then, convert the original TXT annotations into COCO-format JSON annotations. RS-O includes all train set.
+- **DIOR**. Please download from [DIOR](https://gcheng-nwpu.github.io/#Datasets). Then, convert the original XML annotations into COCO-format JSON annotations. RS-O includes all trainval set.
+- **Others**. Other open-source datasets included in RS-O can be downloaded from:[Baidu Cloud](https://pan.baidu.com/s/1-XQ69xTzGCdFlot_QzCnJg)(code: 7gcj)
 
 2. RS-O-Attri
 
-- The attribute annotations for RS-O can be downloaded from:[Baidu Cloud](https://pan.baidu.com/s/1ofRuBk5ltc_B_9BsT4nM0w?utm_source=chatgpt.com)(code: hxrp)
+- The attribute annotations for RS-O can be downloaded from:[Baidu Cloud](https://pan.baidu.com/s/1Rlvk5j3XUR7XHDsjN8whCg)(code: 68yx)
 
 3. RS-C & RS-C-Attri
 
-- The large-scale curated dataset and its corresponding attribute annotations can be downloaded from:[Baidu Cloud](https://pan.baidu.com/s/1Jw_ZUH3sY29wHNTtvmSHJQ?utm_source=chatgpt.com)(code: mqd9). 
+- The large-scale curated dataset and its corresponding attribute annotations can be downloaded from:[Baidu Cloud](https://pan.baidu.com/s/1gI0BLTuWXMYmuMpm5G98tA)(code: kuw9). 
 Some large files (e.g., `Asia`) are split into multiple parts. Please merge them using:
 
     ```bash
@@ -122,7 +122,7 @@ Some large files (e.g., `Asia`) are split into multiple parts. Please merge them
 
 - **DOTA-v2.0**. Please download the images and horizontal bounding box annotations from the official [DOTA dataset website](https://captain-whu.github.io/DOTA/dataset.html?utm_source=chatgpt.com). After downloading, preprocess the dataset by slicing large images into patches following the official tools provided by [MMRotate DOTA tools](https://github.com/open-mmlab/mmrotate/tree/main/tools/data/dota?utm_source=chatgpt.com). We use all val set to test the performance of DOTA-v2.0.
 - **DIOR**. Please download from [DIOR](https://gcheng-nwpu.github.io/#Datasets). We use all test set to test the performance of DIOR.
-- **Attri_test**. The attribute annotations for Attri_test can be downloaded from:[Baidu Cloud](https://pan.baidu.com/s/1ofRuBk5ltc_B_9BsT4nM0w?utm_source=chatgpt.com)(code: hxrp)
+- **Attri_test**. The attribute annotations for Attri_test can be downloaded from:[Baidu Cloud](https://pan.baidu.com/s/1m6Nvq_i9MBShpGWbA3lYrQ)(code: snmm)
 
 Finally, organize the dataset as follows:
 ```bash
@@ -191,6 +191,17 @@ path/to/your/data/
         └── annotations.json
 ```
 
+### Pretrain Weights
+Please download the following pretrained checkpoints:
+- **DINOv3-ConvNeXT-Tiny** from [DINOv3 repository](https://github.com/facebookresearch/dinov3)  
+  → download: `DINOv3-ConvNeXT-Tiny`
+- **DINOv3-ConvNeXT-Large** from [DINOv3 repository](https://github.com/facebookresearch/dinov3)  
+  → download: `DINOv3-ConvNeXT-Large`
+- **RemoteCLIP-FG** Our fine-tuned **RemoteCLIP-FG** checkpoint can be downloaded from:
+[Google Drive](https://drive.google.com/file/d/1cEgcDZsyNZWRYzasrCKexooWd85EVcJu/view?usp=sharing&utm_source=chatgpt.com)
+
+After downloading, put them in `model_weights` folder.
+
 ### Train
 ```bash
 bash ./tools/dist_train.sh ./sliprs_configs/slip-rs_convnext-t_lora-clip_fpn_1x_rs-attri.py 8
@@ -211,4 +222,28 @@ bash ./tools/dist_test.sh ./sliprs_configs/slip-rs_convnext-t_lora-clip_fpn_1x_r
 ### Visualization
 ```bash
 python ./tools/sliprs_infer_visualize.py ./sliprs_configs/slip-rs_convnext-t_lora-clip_fpn_1x.py ./path/to/SLIP_RS_T.pth ./tools/plane.png --prompt ['plane+twin-engines', 'plane+four-engines'] --out-dir ./
+```
+
+You can test using any number and combination of the attributes found in the following dictionary, arranged in any order:
+```bash
+attri_dict = {"Plane" : {'Engine position': ['At wing roots and lower fuselage', 'Beneath the wings',
+                                            'On the nose', 'Rear fuselage', 'Above the wings', 'Embedded within wing'],
+                        'Number of engines': ['Eight-engine', 'Four-engine', 'One-engine', 'Twin-engine', 'Ten-engine'],
+                        'Propulsion type': ['Jet', 'Propeller'],
+                        'Purpose': ['AerialSupport Aircraft', 'Airborne Early Warning Aircraft', 'Airline Aircraft',
+                                    'Anti-Submarine Warfare Aircraft', 'Bomber', 'Chartered aircraft', 'Fighter',
+                                    'Propeller', 'Trainer', 'Transport Aircraft', 'Attack aircraft'],
+                        'Usage': ['Civilian Aircraft', 'Commercial Aircraft', 'Military Aircraft'],
+                        'Wing configuration': ['Straight wing', 'Swept delta wing', 'Swept diamond-like wing',
+                                                'Swept wing', 'Swept, variable-sweep wing', 'Flying wing']},
+            "Ship" : {'Usage': ['Civilian Ship', 'Commercial Ship', 'Engineering Ship', 'Military Ship'],
+                        'Subcat': ['Barge', 'Container Ship', 'Dry Cargo Ship',
+                                    'Cruise Ship', 'Liquid Cargo Ship', 'RoRo', 'Yacht'],
+                        'Purpose': ['Aircraft Carrier', 'Amphibious Ship', 'Auxiliary Ship', 'Cargo Ship', 'Commander', 
+                                    'Cruiser', 'Destroyer', 'Frigate', 'Landing', 'Medical Ship', 'Military Transport Ship', 
+                                    'Passenger Ship', 'Patrol', 'Submarine', 'Test ship', 'Training ship', 'Tugboat',
+                                    'Fishing Vessel', 'Motorboat']},
+            "Vehicle" : {'Purpose': ['Bus', 'Cargo Truck', 'Dump Truck', 'Excavator', 'Pick-up', 'Small Passenger Car',
+                                     'Tractor', 'Truck Tractor', 'Van'],
+                         'Usage': ['Engineering Vehicle', 'Large Civilian Vehicle', 'Small Civilian Vehicle', 'Truck']}}
 ```
