@@ -1,5 +1,9 @@
 # SLIP-RS: Structured-Attribute Language-Image Pre-Training for Remote Sensing Object Detection
 
+<p align="center">
+    <a href="https://arxiv.org/pdf/2605.23144"><img src="https://img.shields.io/badge/Arxiv-2408.09110-b31b1b.svg?logo=arXiv"></a>
+</p>
+
 
 ## Abstract
 Existing language-image pre-training methods for remote sensing object detection are constrained by Monolithic Label Learning, which relies on exhaustively enumerating open-set categories via black-box data to acquire fine-grained representations. This paradigm introduces a strong dependency on large-scale labeled data, which is fundamentally incompatible with the inherent data scarcity in remote sensing scenarios.
